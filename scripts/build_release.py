@@ -30,7 +30,8 @@ def main():
         '--exclude-module', 'PySide6.QtWebEngineWidgets',
         'main.py'], cwd=ROOT, check=True)
     bundle = ROOT / 'dist' / 'QingXia'
-    for name in ('LICENSE', 'README.md', 'CHANGELOG.md', 'THIRD_PARTY_NOTICES.md', 'VERSION'):
+    for name in ('LICENSE', 'README.md', 'CHANGELOG.md', 'CONTRIBUTING.md', 'SECURITY.md',
+                 'THIRD_PARTY_NOTICES.md', 'VERSION'):
         shutil.copy2(ROOT / name, bundle / name)
     shutil.copytree(ROOT / 'third_party_licenses', bundle / 'third_party_licenses', dirs_exist_ok=True)
     shutil.copytree(ROOT / 'docs', bundle / 'docs', dirs_exist_ok=True)
