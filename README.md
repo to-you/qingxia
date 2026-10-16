@@ -2,6 +2,8 @@
 
 Windows 本地剪贴板与截图工具。收集随手复制的内容，用截图标注表达重点，用多图布局整理图片。
 
+**[轻匣官网](https://to-you.github.io/qingxia/)** · [下载 Windows 版](https://github.com/to-you/qingxia/releases/latest) · [使用说明](docs/usage.md)
+
 ![剪贴板](docs/screenshots/clipboard.png)
 
 ## 功能
