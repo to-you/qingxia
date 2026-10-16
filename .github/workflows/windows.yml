@@ -1,0 +1,45 @@
+name: Windows verification and build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+          architecture: x64
+          cache: pip
+      - run: python -m pip install -r requirements-dev.txt
+      - name: Test data storage, scrolling and collage
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python -m unittest test_tools.StoreTests test_tools.ScrollingTests test_collage -v
+      - name: Build portable package
+        run: python scripts/build_release.py
+      - name: Verify packaged runtime
+        env:
+          QT_QPA_PLATFORM: offscreen
+        shell: pwsh
+        run: |
+          $result = Start-Process dist/QingXia/QingXia.exe -ArgumentList '--self-test', 'release-check.json' -PassThru -Wait
+          if ($result.ExitCode -ne 0) { throw 'Packaged runtime check failed' }
+          Get-Content release-check.json
+      - uses: actions/upload-artifact@v7
+        with:
+          name: QingXia-windows-x64
+          path: |
+            dist/QingXia-*-windows-x64.zip
+            dist/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 14
